@@ -128,6 +128,7 @@ Set-SPOTenant [-ApplyAppEnforcedRestrictionsToAdHocRecipients <Boolean>]
  [-AllowAnonymousMeetingParticipantsToAccessWhiteboards <SharingState>]
  [-LabelMismatchEmailHelpLink <String>]
  [-DisableBackToClassic <Boolean>]
+ [-DelayDenyAddAndCustomizePagesEnforcement <Boolean>]
  [<CommonParameters>]
 ```
 
@@ -2415,6 +2416,28 @@ Accept wildcard characters: False
 ### -DisableBackToClassic
 
 Enables or disables the link "Return to classic SharePoint" on modern SharePoint list and library pages.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+Applicable: SharePoint Online
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DelayDenyAddAndCustomizePagesEnforcement
+In the SharePoint admin center, there is a Custom Scripts setting that controls whether users can run custom scripts in OneDrive. This setting will be removed on March 2024. By removing this setting, Administrators will no longer be able to control the default behavior on self service creates sites or personal sites. However, customers will still be able to temporarily enable the ability to run custom script by setting `Set-SPOTenant -DelayDenyAddAndCustomizePagesEnforcement $true`. This will keep the setting available until May 2024.
+
+For more information, see [Allow or prevent custom script](https://learn.microsoft.com/en-us/sharepoint/allow-or-prevent-custom-script)
+
+The valid values are:
+
+False (default) - Blocked from setting custom scripts setting.
+True - Able to set customs scripts setting to true on sites until May 2024.
 
 ```yaml
 Type: Boolean

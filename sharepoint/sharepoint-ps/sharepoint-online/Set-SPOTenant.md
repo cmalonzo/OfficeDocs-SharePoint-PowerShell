@@ -23,7 +23,6 @@ Set-SPOTenant [-ApplyAppEnforcedRestrictionsToAdHocRecipients <Boolean>]
  [-BccExternalSharingInvitations <Boolean>]
  [-BccExternalSharingInvitationsList <String>]
  [-BlockDownloadLinksFileType <BlockDownloadLinksFileTypes>]
- [-BusinessConnectivityServiceDisabled <Boolean>]
  [-DisplayStartASiteOption <Boolean>]
  [-EnableAIPIntegration <Boolean>]
  [-EnableAutoNewsDigest <Boolean>]
@@ -42,7 +41,6 @@ Set-SPOTenant [-ApplyAppEnforcedRestrictionsToAdHocRecipients <Boolean>]
  [-ShowAllUsersClaim <Boolean>]
  [-ShowEveryoneClaim <Boolean>]
  [-ShowEveryoneExceptExternalUsersClaim <Boolean>]
- [-AllowEveryoneExceptExternalUsersClaimInPrivateSite <Boolean>]
  [-SignInAccelerationDomain <String>]
  [-StartASiteFormUrl <String>]
  [-UsePersistentCookiesForExplorerView <Boolean>]
@@ -63,7 +61,6 @@ Set-SPOTenant [-ApplyAppEnforcedRestrictionsToAdHocRecipients <Boolean>]
  [-IPAddressEnforcement <Boolean>]
  [-IPAddressWACTokenLifetime <Int32>]
  [-LegacyAuthProtocolsEnabled <Boolean>]
- [-MediaTranscriptionAutomaticFeatures <MediaTranscriptionAutomaticFeaturesPolicyType>]
  [-MediaTranscription <MediaTranscriptionPolicyType>]
  [-NotificationsInOneDriveForBusinessEnabled <Boolean>]
  [-NotificationsInSharePointEnabled <Boolean>]
@@ -88,6 +85,7 @@ Set-SPOTenant [-ApplyAppEnforcedRestrictionsToAdHocRecipients <Boolean>]
  [-SpecialCharactersStateInFileFolderNames <SpecialCharactersState>]
  [-ReSyncTenantPrivacyProfile]
  [-UseFindPeopleInPeoplePicker <Boolean>]
+ [-UserVoiceForFeedbackEnabled <Boolean>]
  [-ContentTypeSyncSiteTemplatesList [String[]]]
  [-ExcludeSiteTemplate]
  [-CustomizedExternalSharingServiceUrl <String>]
@@ -103,10 +101,8 @@ Set-SPOTenant [-ApplyAppEnforcedRestrictionsToAdHocRecipients <Boolean>]
  [-EmailAttestationRequired <Boolean>]
  [-EmailAttestationReAuthDays <Int32>]
  [-BlockUserInfoVisibility]
- [-BlockUserInfoVisibilityInOneDrive]
- [-BlockUserInfoVisibilityInSharePoint]
- [-AllowOverrideForBlockUserInfoVisibility]
  [-IncludeAtAGlanceInShareEmails]
+ [-SyncAadB2BManagementPolicy <Boolean>]
  [-StopNew2010Workflows <Boolean>]
  [-StopNew2013Workflows <Boolean>]
  [-BlockSendLabelMismatchEmail <Boolean>]
@@ -114,34 +110,25 @@ Set-SPOTenant [-ApplyAppEnforcedRestrictionsToAdHocRecipients <Boolean>]
  [-ViewInFileExplorerEnabled <Boolean>]
  [-AllowGuestUserShareToUsersNotInSiteCollection <Boolean>]
  [-DisableCustomAppAuthentication <Boolean>]
- [-SiteOwnerManageLegacyServicePrincipalEnabled <Boolean>]
  [-ReduceTempTokenLifetimeEnabled <Boolean>]
  [-ReduceTempTokenLifetimeValue <Int32>]
  [-ShowPeoplePickerGroupSuggestionsForIB <Boolean>]
- [-InformationBarriersSuspension <Boolean>]
- [-IBImplicitGroupBased <Boolean>]
- [-DefaultOneDriveInformationBarrierMode <String>]
  [-ViewersCanCommentOnMediaDisabled <Boolean>]
  [-CoreSharingCapability <SharingCapabilities>]
  [-OneDriveRequestFilesLinkEnabled <Boolean>]
  [-CoreRequestFilesLinkEnabled <Boolean>]
  [-OneDriveRequestFilesLinkExpirationInDays <Int32>]
  [-CoreRequestFilesLinkExpirationInDays <Int32>]
+ [-OneDriveLoopSharingCapability <String>]
  [-OneDriveLoopDefaultSharingLinkScope <String>]
  [-OneDriveLoopDefaultSharingLinkRole <String>]
+ [-CoreLoopSharingCapability <String>]
  [-CoreLoopDefaultSharingLinkScope <String>]
  [-CoreLoopDefaultSharingLinkRole <String>]
  [-AllowAnonymousMeetingParticipantsToAccessWhiteboards <SharingState>]
  [-LabelMismatchEmailHelpLink <String>]
  [-DisableBackToClassic <Boolean>]
- [-IsEnableAppAuthPopUpEnabled <Boolean>]
- [-BlockDownloadFileTypePolicy <Boolean>]
- [-EnableAutoExpirationVersionTrim <Boolean>]
- [-MajorVersionLimit <int>]
- [-ExpireVersionsAfterDays <int>]
- [-MassDeleteNotificationDisabled <Boolean>]
- [-DisableDocumentLibraryDefaultLabeling <Boolean>]
- [-EnableSensitivityLabelforPDF <Boolean>]
+ [-DelayDenyAddAndCustomizePagesEnforcement <Boolean>]
  [<CommonParameters>]
 ```
 
@@ -235,46 +222,6 @@ Set-SPOTenant -ShowPeoplePickerSuggestionsForGuestUsers $true
 
 This example enables the option to search for existing guest users at Tenant Level.
 
-### EXAMPLE 11
-
-```powershell
-Set-SPOTenant -EnableAutoExpirationVersionTrim $true
-```
-
-This example sets Automatic Version Storage Limits on all new document libraries at Tenant Level.
-
-### EXAMPLE 12
-
-```powershell
-Set-SPOTenant -EnableAutoExpirationVersionTrim $false -MajorVersionLimit 500 -ExpireVersionsAfterDays 30
-```
-
-This example sets Manual Version Storage Limits on all new document libraries at Tenant Level by limiting the number of major versions and the time (in days) versions are kept. 
-
-### EXAMPLE 13
-
-```powershell
-Set-SPOTenant -EnableAutoExpirationVersionTrim $false -MajorVersionLimit 500 -ExpireVersionsAfterDays 0
-```
-
-This example sets Manual Version Storage Limits on all new document libraries at Tenant Level by limiting the number of major versions with no time limits.
-
-### EXAMPLE 14
-
-```powershell
-PS > Set-SPOTenant -SharingDomainRestrictionMode "AllowList" -SharingAllowedDomainList "contoso.com fabrikam.com"
-```
-
-This example enables users to share with external collaborators from those domains only.
-
-### EXAMPLE 15
-
-```powershell
-PS > Set-SPOTenant -SharingDomainRestrictionMode "BlockList" -SharingBlockedDomainList "contoso.com"
-```
-
-This example enables users to share with all external collaborators except for those on the BlockedDomainList.
-
 ## PARAMETERS
 
 ### -ApplyAppEnforcedRestrictionsToAdHocRecipients
@@ -358,21 +305,6 @@ Applicable: SharePoint Online
 Required: False
 Position: Named
 Default value: WebPreviewableFiles
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BusinessConnectivityServiceDisabled
-Prevents access to features that depend on the Business Connectivity Service (BCS), including external lists, external columns, and external content types.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -573,7 +505,7 @@ The valid values are:
 - False - No folder is created when the site and OneDrive for Business document library is created.
 
 The default behavior of the Shared with Everyone folder changed in August 2015.  
-For additional information about the change, see [Provision the Shared with Everyone folder in OneDrive for Business](https://support.office.com/article/Provision-the-Shared-with-Everyone-folder-in-OneDrive-for-Business-6bb02c91-fd0b-42ba-9457-3921cb6dc5b2).
+For additional information about the change, see Provision the Shared with Everyone folder in OneDrive for Business (<https://support.office.com/en-us/article/Provision-the-Shared-with-Everyone-folder-in-OneDrive-for-Business-6bb02c91-fd0b-42ba-9457-3921cb6dc5b2?ui=en-US&rs=en-US&ad=US)>
 
 ```yaml
 Type: Boolean
@@ -601,7 +533,7 @@ The valid values are:
 - True - User must accept this invitation with bob@contoso.com.
 
 > [!NOTE]
-> If this functionality is turned off (value is False), it is possible for the external/guest users you invite to your Microsoft Entra ID, to log in using their personal, non-work accounts either on purpose, or by accident (they might have a pre-existing, signed in session already active in the browser window they use to accept your invitation).
+> If this functionality is turned off (value is False), it is possible for the external/guest users you invite to your Azure AD, to log in using their personal, non-work accounts either on purpose, or by accident (they might have a pre-existing, signed in session already active in the browser window they use to accept your invitation).
 > [!NOTE]
 > Even though setting the value is instant (if you first run **Set-SPOTenant -RequireAcceptingAccountMatchInvitedAccount $True**, and then **Get-SPOTenant -RequireAcceptingAccountMatchInvitedAccount**, True should be returned), the functionality isn't turned on immediately. It may take up to 24 hours to take effect.
 
@@ -669,7 +601,7 @@ Accept wildcard characters: False
 
 Enables the administrator to hide the All Users claim groups in People Picker.
 
-When users share an item with "All Users (x)", it is accessible to all organization members in the tenant's Microsoft Entra ID who have authenticated with via this method. When users share an item with "All Users (x)" it is accessible to all organization members in the tenant that used NTLM to authentication with SharePoint.
+When users share an item with "All Users (x)", it is accessible to all organization members in the tenant's Azure Active Directory who have authenticated with via this method. When users share an item with "All Users (x)" it is accessible to all organization members in the tenant that used NTLM to authentication with SharePoint.
 
 Note, the All Users (authenticated) group is equivalent to the Everyone claim, and shows as Everyone.
 To change this, see -ShowEveryoneClaim.
@@ -694,7 +626,7 @@ Accept wildcard characters: False
 ### -ShowEveryoneClaim
 
 Enables the administrator to hide the Everyone claim in the People Picker.  
-When users share an item with Everyone, it is accessible to all authenticated users in the tenant's Microsoft Entra ID, including any active external users who have previously accepted invitations.
+When users share an item with Everyone, it is accessible to all authenticated users in the tenant's Azure Active Directory, including any active external users who have previously accepted invitations.
 
 Note, that some SharePoint system resources such as templates and pages are required to be shared to Everyone and this type of sharing does not expose any user data or metadata.
 
@@ -718,7 +650,7 @@ Accept wildcard characters: False
 ### -ShowEveryoneExceptExternalUsersClaim
 
 Enables the administrator to hide the "Everyone except external users" claim in the People Picker.  
-When users share an item with "Everyone except external users", it is accessible to all organization members in the tenant's Microsoft Entra ID, but not to any users who have previously accepted invitations.
+When users share an item with "Everyone except external users", it is accessible to all organization members in the tenant's Azure Active Directory, but not to any users who have previously accepted invitations.
 
 The valid values are:  
 
@@ -738,33 +670,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -AllowEveryoneExceptExternalUsersClaimInPrivateSite
-
-When this parameter is true, the "Everyone except external users" claim is available in the People Picker of a private site. Set it to false to disable this feature.
-
-The valid values are:  
-
-- True - The "Everyone except external users" claim is available in People Picker of a private site.  
-- False (default) - The "Everyone except external users" claim is not available in People Picker of a private site.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -SignInAccelerationDomain
 
-Specifies the home realm discovery value to be sent to Microsoft Entra ID during the user sign-in process.
+Specifies the home realm discovery value to be sent to Azure Active Directory (AAD) during the user sign-in process.
 
-When the organization uses a third-party identity provider, this prevents the user from seeing the Microsoft Entra Home Realm Discovery web page and ensures the user only sees their company's Identity Provider's portal.
-This value can also be used with Microsoft Entra ID P1 or P2 to customize the Microsoft Entra sign-in page.
+When the organization uses a third-party identity provider, this prevents the user from seeing the Azure Active Directory Home Realm Discovery web page and ensures the user only sees their company's Identity Provider's portal.
+This value can also be used with Azure Active Directory Premium to customize the Azure Active Directory login page.
 
 Acceleration will not occur on site collections that are shared externally.
 
@@ -1003,7 +914,7 @@ Accept wildcard characters: False
 
 ### -DisableCustomAppAuthentication
 
-Prevents apps using an Azure Access Control (ACS) app-only access token to access SharePoint. ACS, a service of Microsoft Entra ID, has been retired on November 7, 2018. This retirement does not impact the SharePoint add-in model, which uses the https://accounts.accesscontrol.windows.net hostname (which is not impacted by this retirement). For new tenants, apps using an ACS app-only access token are disabled by default. We recommend using the Microsoft Entra app-only model which is modern and more secure. Note that marking this property to $true doesn't prevent creating apps in SharePoint that use an Azure Access Control (ACS) app-only access token. Marking this property to $true only ensures that such apps can't access SharePoint anymore.
+Prevents apps using an Azure Access Control (ACS) app-only access token to access SharePoint. ACS, a service of Azure Active Directory (Azure AD), has been retired on November 7, 2018. This retirement does not impact the SharePoint add-in model, which uses the https://accounts.accesscontrol.windows.net hostname (which is not impacted by this retirement). For new tenants, apps using an ACS app-only access token are disabled by default. We recommend using the Azure AD app-only model which is modern and more secure. Note that marking this property to $true doesn't prevent creating apps in SharePoint that use an Azure Access Control (ACS) app-only access token. Marking this property to $true only ensures that such apps can't access SharePoint anymore.
 
 Accepts a value of true or false. By default this feature is set to true.
 
@@ -1015,24 +926,6 @@ Applicable: SharePoint Online
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SiteOwnerManageLegacyServicePrincipalEnabled
-
-Allows or disallows the site collection admins to manage the Azure Access Control (ACS) service principal.
-
-When the value is set to false, the service principal can only be created or updated by the SharePoint tenant admin. If the value is set to true, both the SharePoint tenant admin and site collection admin will be able to create or update the service principal through SharePoint.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -1199,7 +1092,7 @@ Accept wildcard characters: False
 
 ### -MediaTranscription
 
-When the feature is enabled, videos can have transcripts generated on demand or generated automatically in certain scenarios. This is the default because the policy is default on. If a video owner decides they don't want the transcript, they can always hide or delete it from that video. 
+When the feature is enabled, videos can have transcripts generated on demand or generated automatically in certain scenarios. This is the default because the policy is default on. If a video owner decides they don’t want the transcript, they can always hide or delete it from that video. 
 Possible values:
 
 - Enabled
@@ -1207,26 +1100,6 @@ Possible values:
 
 ```yaml
 Type: MediaTranscriptionPolicyType
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: Enabled
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -MediaTranscriptionAutomaticFeatures
-
-When the feature is enabled, videos can have transcripts generated automatically on upload. The policy is default on. If a tenant admin decides to disable the feature, he can do so by disabling the policy at tenant level. This feature can not be enabled or disabled at site level.
-Possible values:
-
-- Enabled
-- Disabled
-
-```yaml
-Type: MediaTranscriptionAutomaticFeaturesPolicyType
 Parameter Sets: (All)
 Aliases:
 Applicable: SharePoint Online
@@ -1657,9 +1530,9 @@ The 'SyncPrivacyProfileProperties' parameter is obsolete and renamed ReSyncTenan
 
 This parameter enables the synchronization of privacy profile properties.
 
-ReSyncTenantPrivacyProfile sets whether or not the synced tenant properties will be updated on the next request. The request will cause Microsoft Entra ID to grab the tenant's current display name (TenantDisplayName) and privacy profile URL (PrivacyProfileUrl).
+ReSyncTenantPrivacyProfile sets whether or not the synced tenant properties will be updated on the next request. The request will cause Azure Active Directory to grab the tenant's current display name (TenantDisplayName) and privacy profile URL (PrivacyProfileUrl). 
 
-Running 'Set-SPOTenant - ReSyncTenantPrivacyProfile' will force a sync from the Microsoft Entra privacy profile URL to SharePoint Online. The sync may take up to 24 hours to complete. Whenever SharePoint Online gets the privacy profile URL, it checks whether the last sync time is out of the sync time window. If it is, it syncs from Microsoft Entra ID to SharePoint Online.
+Running 'Set-SPOTenant - ReSyncTenantPrivacyProfile' will force a sync from the Azure Active Directory privacy profile URL to SharePoint Online. The sync may take up to 24 hours to complete. Whenever SharePoint Online gets the privacy profile URL, it checks whether the last sync time is out of the sync time window. If it is, it syncs from Azure Active Directory to SharePoint Online.
 
 ```yaml
 Type: SwitchParameter
@@ -1691,12 +1564,16 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-### -DisableDocumentLibraryDefaultLabeling
 
-This switch allows tenant admins to disable the capability of configuring a default sensitivity label for a document library.
+### -UserVoiceForFeedbackEnabled
 
-> [!NOTE]
-> When set to $true, users aren't able to apply a default sensitivity label for a document library. The default value is false.  
+Enables or disables the User Voice Feedback button.
+
+PARAMVALUE: $true | $false
+
+When set to $true, the "Feedback" link will be shown at the bottom of all modern SharePoint Online pages. The "Feedback" link will allow the end user to fill out a feedback form inside SharePoint Online which will then create an entry in the public SharePoint UserVoice topic.
+
+When set to $false, feedback link will not be shown anymore. It may take up to an hour for a change of this property to be reflected consistently throughout your tenant.
 
 ```yaml
 Type: Boolean
@@ -1705,11 +1582,10 @@ Aliases:
 Applicable: SharePoint Online
 Required: False
 Position: Named
-Default value: false
+Default value: $true
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
 
 ### -CustomizedExternalSharingServiceUrl
 
@@ -1849,7 +1725,7 @@ Accept wildcard characters: False
 
 ### -EnableAzureADB2BIntegration  
 
-Enables OneDrive and SharePoint integration with Microsoft Entra B2B. For more information, see [SharePoint and OneDrive integration with Microsoft Entra B2B](/sharepoint/sharepoint-azureb2b-integration).
+Enables the preview for OneDrive and SharePoint integration with Azure AD B2B. For more information see <http://aka.ms/spo-b2b-integration>
 
 PARAMVALUE: $true | $false
 
@@ -1907,33 +1783,7 @@ Aliases:
 Applicable: SharePoint Online
 Required: False
 Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-### -EnableSensitivityLabelforPDF
-
-Allows tenant admins to turn on support for PDFs with sensitivity labels for the following scenarios:
-
-- Applying a sensitivity label in Office for the web.
-- Uploading a labeled document, and then extracting and displaying that sensitivity label.
-- Search, eDiscovery, and data loss prevention.
-- Auto-labeling policies and default sensitivity labels for SharePoint document libraries.
-
-The valid values are:
-
-- True - Enables support for PDFs.
-- False (default) - Disables support for PDFs.
-
-```yaml
-Type: Boolean
-
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: false
+Default value: True
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -2005,80 +1855,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -BlockUserInfoVisibilityInOneDrive
-
-Blocks users from accessing User Info if they have Limited Access permission only to the OneDrive. The policy applies to all OneDrives in the organization. 
-
-The valid values are: 
-
-- ApplyToNoUsers (default) – No users are prevented from accessing User Info when they have Limited Access permission only.
-
-- ApplyToAllUsers – All users (internal or external) are prevented from accessing User Info if they have Limited Access permission only.
-
-- ApplyToGuestAndExternalUsers – Only external or guest users are prevented from accessing User Info if they have Limited Access permission only.
-
-- ApplyToInternalUsers – Only internal users are prevented from accessing User Info if they have Limited Access permission only.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: ApplyToNoUsers
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BlockUserInfoVisibilityInSharePoint
-
-Blocks users from accessing User Info if they have Limited Access permission only to a SharePoint site. The policy applies to all SharePoint sites in the organization.
-
-The valid values are: 
-
-- ApplyToNoUsers (default) – No users are prevented from accessing User Info when they have Limited Access permission only to a SharePoint site.
-
-- ApplyToAllUsers – All users (internal or external) are prevented from accessing User Info if they have Limited Access permission only to a SharePoint site.
-
-- ApplyToGuestAndExternalUsers – Only external or guest users are prevented from accessing User Info if they have Limited Access permission only to a SharePoint site.
-
-- ApplyToInternalUsers – Only internal users are prevented from accessing User Info if they have Limited Access permission only to a SharePoint site.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: ApplyToNoUsers
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AllowOverrideForBlockUserInfoVisibility
-
-Allow organization level policy for Block User Info Visibility to be overridden for a SharePoint site or OneDrive. Use Set-SPOSite to override the policy for a SharePoint site or OneDrive. 
-
-The valid values are:
-
-- False (default) – Do not allow the Block User Info Visibility policy to be overridden for a SharePoint site or OneDrive.
-
-- True – Allow the Block User Info Visibility policy to be overridden for a SharePoint site or OneDrive.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -EnableAutoNewsDigest
 
 Enable or disable auto news digest. [Documentation](https://aka.ms/autonewsdigest) for auto news digest.
@@ -2109,6 +1885,21 @@ Applicable: SharePoint Online
 Required: False
 Position: Named
 Default value: True
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SyncAadB2BManagementPolicy
+Syncs Azure B2B Management Policies. For more information, see [SharePoint and OneDrive integration with Azure AD B2B](https://learn.microsoft.com/sharepoint/sharepoint-azureb2b-integration-preview).
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -2247,7 +2038,7 @@ The valid values are:
 - False (default) – Guest users will only be able to share to users that exist within the current site. 
 - True – Guest users will be able to find user accounts in the directory by typing in the exact email address match. 
 
-Note: When the value is set to True, you will also need to enable [SharePoint and OneDrive integration with Microsoft Entra B2B](/sharepoint/sharepoint-azureb2b-integration) for the functionality to work.
+Note: When the value is set to True, you will also need to enable [SharePoint and OneDrive integration with Azure AD B2B](/sharepoint/sharepoint-azureb2b-integration) for the functionality to work.
 
 ```yaml
 Type: Boolean
@@ -2281,6 +2072,33 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -OneDriveLoopSharingCapability
+
+When sharing a whiteboard in a Teams meeting, Whiteboard creates a sharing link that’s accessible by anyone within the organization and automatically shares the whiteboard with any in-tenant users in the meeting.
+
+There’s an additional capability for temporary collaboration by external and shared device accounts during a meeting. This allows these users to temporarily view and collaborate on whiteboards when they’re shared in a Teams meeting, similar to PowerPoint Live sharing.
+
+If you have the external sharing for OneDrive for Business allowed, no further action is required. If you have external sharing for OneDrive for Business disabled, you can leave it disabled but you must enable this new setting. The setting will not take effect until the SharingCapability 'ExternalUserAndGuestSharing' is also enabled at Tenant level. For more information, see [Enable Microsoft Whiteboard for your organization](https://support.microsoft.com/office/enable-microsoft-whiteboard-for-your-organization-1caaa2e2-5c18-4bdf-b878-2d98f1da4b24).
+
+
+The valid values are:  
+
+- Disabled
+- ExternalUserSharingOnly
+- ExternalUserAndGuestSharing
+- ExistingExternalUserSharingOnly
+
+```yaml
+Type: SharingCapabilities
+Parameter Sets: (All)
+Aliases:
+Applicable: SharePoint Online
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 ### -OneDriveLoopDefaultSharingLinkScope
 
 Gets or sets default share link scope for fluid on OneDrive sites. 
@@ -2308,12 +2126,9 @@ Accept wildcard characters: False
 
 Gets or sets default share link role for fluid on OneDrive sites.
 
-Note: Although the values below may be viewable in Powershell, only View OR Edit may be set at this time. 
-
 The valid values are:  
 
 - Edit
-- View
 - LimitedEdit
 - LimitedView
 - ManageList
@@ -2334,7 +2149,28 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+### -CoreLoopSharingCapability
 
+Gets or sets collaboration type for fluid on core partition
+
+The valid values are:  
+
+- Disabled
+- ExternalUserSharingOnly
+- ExternalUserAndGuestSharing
+- ExistingExternalUserSharingOnly
+
+```yaml
+Type: SharingCapabilities
+Parameter Sets: (All)
+Aliases:
+Applicable: SharePoint Online
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 ### -CoreLoopDefaultSharingLinkScope
 
 Gets or sets default share link scope for fluid on SharePoint sites. 
@@ -2362,12 +2198,9 @@ Accept wildcard characters: False
 
 Gets or sets default share link role for fluid on SharePoint sites.
 
-Note: Although the values below may be viewable in Powershell, only View OR Edit may be set at this time. 
-
 The valid values are:  
 
 - Edit
-- View
 - LimitedEdit
 - LimitedView
 - ManageList
@@ -2434,64 +2267,6 @@ The ShowPeoplePickerGroupSuggestionsForIB setting (defaulted to false) allows sh
 
 ```yaml
 Type: Boolean
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -InformationBarriersSuspension
-
-When InformationBarriersSuspension parameter is set to $false, information barriers in SharePoint and OneDrive is enabled, when set to $true, it is disabled.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IBImplicitGroupBased
-
-The IBImplicitGroupBased setting enables Microsoft 365 Groups membership-based access and sharing control for all Implicit mode sites.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DefaultOneDriveInformationBarrierMode
-
-The DefaultOneDriveInformationBarrierMode sets the information barrier mode for all OneDrive sites.
-
-The valid values are:
-
-- Open
-- Explicit
-- Implicit
-- OwnerModerated
-- Mixed
-
-For more information about information barriers, see [Use information barriers with SharePoint](/purview/information-barriers-sharepoint) for your SharePoint Online environment.
-  
-```yaml
-Type: String
 Parameter Sets: (All)
 Aliases:
 Applicable: SharePoint Online
@@ -2654,118 +2429,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IsEnableAppAuthPopUpEnabled
+### -DelayDenyAddAndCustomizePagesEnforcement
+This parameter controls how SharePoint will deal with sites where custom scripts are allowed.
 
-Enables or disables users in the organization to authenticate SharePoint applications using popups. 
+The valid values are:
 
-This parameter affects the way code in SharePoint interacts with Microsoft Entra ID to get tokens to access APIs. In scenarios where third-party cookies are disabled (such as Safari browsers with ITP feature enabled), any code that requires a token to access an API automatically triggers a full page refresh. When IsEnableAppAuthPopUpEnabled is set to $true, SharePoint will instead surface a popup in this scenario.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BlockDownloadFileTypePolicy 
-
-You can block the download of Teams meeting recording files from SharePoint or OneDrive. This allows users to remain productive while addressing the risk of accidental data loss. Users have browser-only access to play the meeting recordings with no ability to download or sync files or access them through apps.
-
-This policy applies to new meeting recordings across the entire organization. You can exempt people who are members of specified security groups from the policy. This allows you to specify governance or compliance specialists who should have download access to meeting recordings.
-
-After the policy is turned on, any new Teams meeting recording files created by the Teams service and saved in SharePoint and OneDrive are blocked from download.
-
-Because this policy affects meeting recordings stored in OneDrive and SharePoint, you must be a SharePoint administrator to configure it.
-
-Note that this policy doesn't apply to manually uploaded meeting recording files. For more details, see [Block the download of Teams meeting recording files from SharePoint or OneDrive](/microsoftteams/block-download-meeting-recording).
-
-```yaml
-Type: Boolean 
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EnableAutoExpirationVersionTrim
-Global and SharePoint admins in Microsoft 365 can set Organization-level Version History Limit settings that universally apply to new versions created on all new Document Libraries created in your organization. 
-
-When Version History Limits are managed Automatically, SharePoint employs an algorithm behind the scenes that deletes (thins out) intermittent older versions that are least likely to be needed, while preserving sufficient high-value versions - more versions in the recent past and fewer farther back in time - in case restores are required.
-
-The valid values are: 
-
-- True – Version History Limits for new versions created on all new Document Libraries in your organization will be managed Automatically.  
-- False – Version History Limits for new Versions created on all new Document Libraries in your organization will be managed Manually by setting limits to the number of major versions (MajorVersionLimit) and time set (ExpireVersionsAfterDays).  Review the documentation of both parameters to manage your organization's version limits Manually.  
+* False (default) - for site collections where administrators enabled the ability to add custom script, SharePoint will revoke that ability within 24 hours from the last time this setting was changed.
+* True - All changes performed by administrators to custom script settings are preserved. When the value is set to true, a banner shows in the active sites list of the SharePoint tenant admin center informing that changes to custom scripts are permanent.
 
 > [!NOTE]
-> When Version History Limits are managed Manually (EnableAutoExpirationVersionTrim $false), MajorVersionLimit and ExpireVersionsAfterDays are both required parameters with the following acceptable values:
-> a. MajorVersionLimit accepts values from 1 through 50,000 (inclusive).
-> b. ExpireVersionsAfterDays accepts values of 0 to Never Expire or values >= 30 to delete versions that exceed that time period.
-> When Version History Limits are managed Automatically (EnableAutoExpirationVersionTrim $true), setting MajorVersionLimit or ExpireVersionsAfterDays will result in an error as the count limits are set by the service.
->
-> This parameter is currently under private preview.
+> This setting affects all sites. There are no options to preserve changes to custom script settings only on some specific sites. This parameter will be available until May 2024. After that time, administrators can still allow custom scripts on specific sites, but that change will be revoked automatically after up to 24 hours.
 
-PARAMVALUE: $true | $false
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -MajorVersionLimit
-When Version History Limits are managed Manually (EnableAutoExpirationVersionTrim $false), admins will need to set the limits to the number of major versions (MajorVersionLimit) and the time period the versions are stored (ExpireVersionsAfterDays). Please check the description of EnableAutoExpirationVersionTrim for more details.
-
-PARAMVALUE: Int32
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ExpireVersionsAfterDays
-When Version History Limits are managed Manually (EnableAutoExpirationVersionTrim $false), admins will need to set the limits to the number of major versions (MajorVersionLimit) and the time period the versions are stored (ExpireVersionsAfterDays). Please check the description of EnableAutoExpirationVersionTrim for more details.
-
-PARAMVALUE: Int32
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-Applicable: SharePoint Online
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -MassDeleteNotificationDisabled
-Enables or disables the mass delete detection feature. When MassDeleteNotificationDisabled is set to $true, tenant admins can perform mass deletion operations without triggering notifications.
-
-PARAMVALUE: $true | $false
+For more information, see [Allow or prevent custom script](https://learn.microsoft.com/en-us/sharepoint/allow-or-prevent-custom-script)
 
 ```yaml
 Type: Boolean
